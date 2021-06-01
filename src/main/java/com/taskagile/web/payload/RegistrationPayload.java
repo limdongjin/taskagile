@@ -1,5 +1,6 @@
 package com.taskagile.web.payload;
 
+import com.taskagile.domain.application.commands.RegisterCommand;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,4 +22,8 @@ public class RegistrationPayload {
     @Size(min = 6, max = 30, message = "Password must be 6 <= _ <= 30 characters")
     @NotNull
     private String password;
+
+    public RegisterCommand toCommand() {
+        return new RegisterCommand(username, emailAddress, password);
+    }
 }
