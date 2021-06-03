@@ -1,5 +1,6 @@
 package com.taskagile.web.apis;
 
+import com.taskagile.config.SecurityConfiguration;
 import com.taskagile.domain.application.UserService;
 import com.taskagile.domain.model.user.EmailAddressExistException;
 import com.taskagile.domain.model.user.UsernameExistException;
@@ -23,7 +24,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {RegistrationApiController.class})
+@ContextConfiguration(classes = {
+        SecurityConfiguration.class,
+        RegistrationApiController.class
+})
 @WebMvcTest
 @ActiveProfiles("test")
 class RegistrationApiControllerTest {
@@ -72,6 +76,7 @@ class RegistrationApiControllerTest {
         doThrow(UsernameExistException.class)
                 .when(userService)
                 .register(payload.toCommand());
+
         // then
         // 400 코드 응답을 보내고, 이미 존재하는 사용자라는 메시지를 보낸다.
         mockMvc.perform(
