@@ -10,6 +10,8 @@ import javax.validation.constraints.Size;
 
 @Getter @Setter
 public class RegistrationPayload {
+    // 생성자 메서드는 작성하지 않았다. Payload 는 스프링이 setter 로 필드 값을 채워넣기때문에 생성자가
+    // 필요 없다고 판단하였다.
     @Size(min = 2, max = 50, message = "Username must be 2  <= _ <= 50 characters")
     @NotNull
     private String username;

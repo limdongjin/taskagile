@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-// 스프링 의존성이 없는 테스트이므로 어노테이션을 붙이지 않았다.
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
     @Mock private RegistrationManagement registrationManagementMock;
