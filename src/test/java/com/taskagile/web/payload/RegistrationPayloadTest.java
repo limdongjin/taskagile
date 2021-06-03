@@ -129,7 +129,7 @@ class RegistrationPayloadTest {
         // given
         String tooLongPassword = "1q2".repeat(10)+'!';
         assertTrue(tooLongPassword.length() > 30);
-        RegistrationPayload payload = createRegistrationPayload("dongjin", "exam.exam.com", tooLongPassword);
+        RegistrationPayload payload = createRegistrationPayload("dongjin", "exam@exam.com", tooLongPassword);
 
         // when
         Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
