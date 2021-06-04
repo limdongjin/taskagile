@@ -8,6 +8,7 @@ import java.io.IOException;
 public final class JsonUtils {
     public static String toJson(Object object) {
         ObjectMapper objectMapper = new ObjectMapper();
+
         try {
             return  objectMapper.writeValueAsString(object);
         }catch (JsonProcessingException e){

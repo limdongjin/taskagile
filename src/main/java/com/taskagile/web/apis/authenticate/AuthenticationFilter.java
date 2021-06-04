@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,10 +30,18 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
                                                 HttpServletResponse httpServletResponse)
             throws AuthenticationException, IOException, ServletException {
         String requestBody = IOUtils.toString(httpServletRequest.getReader());
+
+        Logger debug_auth = LoggerFactory.getLogger("debug auth");
+        debug_auth.error(httpServletRequest.toString());
+        debug_auth.error(httpServletRequest.getReader().toString());
+        debug_auth.error(requestBody);
+        debug_auth.error("debug auth!!!");
+
         LoginRequest loginRequest = JsonUtils.toObject(requestBody, LoginRequest.class);
 
         if(loginRequest == null || loginRequest.isInvalid()){
             // 시큐리티 내부에 있는 AuthenticationFailureHandler 가 처리한다.
+            debug_auth.error("loginRequst exception throwing");
             throw new InsufficientAuthenticationException("Invalid Authentication Request");
         }
 

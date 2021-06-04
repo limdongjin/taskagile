@@ -1,5 +1,6 @@
 package com.taskagile.domain.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,8 @@ public class SimpleUser implements UserDetails, Serializable {
     private static final long serialVersionUID = -7144174657188362966L;
     private final Long userId;
     private final String username;
+
+    @JsonIgnore
     private final String password;
 
     public SimpleUser(User user) {

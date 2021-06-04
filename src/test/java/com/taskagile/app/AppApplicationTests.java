@@ -12,5 +12,4 @@ class AppApplicationTests {
     void contextLoads() {
         assertEquals(1, 1);
     }
-
 }

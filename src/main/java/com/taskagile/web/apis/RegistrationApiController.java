@@ -6,6 +6,7 @@ import com.taskagile.domain.model.user.UsernameExistException;
 import com.taskagile.web.payload.RegistrationPayload;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -18,6 +19,16 @@ public class RegistrationApiController {
 
     public RegistrationApiController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/api/welcome")
+    public ResponseEntity welcome(){
+        return ResponseEntity.ok("welcome");
+    }
+
+    @GetMapping("/api/login-fail")
+    public ResponseEntity loginFail(){
+        return ResponseEntity.status(401).body("login fail");
     }
 
     @PostMapping("/api/registrations")
@@ -40,7 +51,9 @@ public class RegistrationApiController {
 
             return ResponseEntity.badRequest().body(result);
         }
-
-        return ResponseEntity.status(201).build();
+        // [TODO] 가입 완료 결과 dto 만들기
+        // RegistrationRes res = new ...
+        // return new resentity.body(res)
+        return ResponseEntity.status(201).body(payload);
     }
 }
