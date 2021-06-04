@@ -2,15 +2,15 @@ package com.taskagile.domain.application.impl;
 
 import com.taskagile.domain.application.UserService;
 import com.taskagile.domain.application.commands.RegisterCommand;
-import com.taskagile.domain.common.mail.MailManager;
 import com.taskagile.domain.common.event.DomainEventPublisher;
+import com.taskagile.domain.common.mail.MailManager;
 import com.taskagile.domain.common.mail.MessageVariable;
-import com.taskagile.domain.model.user.RegistrationException;
-import com.taskagile.domain.model.user.RegistrationManagement;
-import com.taskagile.domain.model.user.User;
-import com.taskagile.domain.model.user.UserRepository;
+import com.taskagile.domain.model.user.*;
 import com.taskagile.domain.model.user.events.UserRegisteredEvent;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
@@ -45,9 +45,23 @@ public class UserServiceImpl implements UserService {
                 "welcome.ftl",
                 MessageVariable.from("user", user));
     }
-// [TODO] UserService 에 UserDetailService 연동하기
-//    @Override
-//    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-//        return null;
-//    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        if(StringUtils.isEmpty(s)){
+            throw new UsernameNotFoundException("No user found.");
+        }
+
+        User user;
+        if(s.contains("@")){
+            user = userRepository.findByEmailAddress(s);
+        }else{
+            user = userRepository.findByUsername(s);
+        }
+
+        if (user == null){
+            throw new UsernameNotFoundException("No user found " + s);
+        }
+        return new SimpleUser(user);
+    }
 }
