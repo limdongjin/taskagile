@@ -1,7 +1,8 @@
 package com.taskagile.config;
 
-import com.taskagile.web.apis.authenticate.AuthenticationFilter;
-import com.taskagile.web.apis.authenticate.CustomAuthenticationSuccessHandler;
+import com.taskagile.web.apis.security.AuthenticationFilter;
+import com.taskagile.web.apis.security.CustomAuthenticationFailureHandler;
+import com.taskagile.web.apis.security.CustomAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -67,12 +68,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler(){
-        // [TODO] 로그인 실패후 json 응답 커스터마이징하기
-
-        SimpleUrlAuthenticationFailureHandler handler
-                = new SimpleUrlAuthenticationFailureHandler();
-        handler.setDefaultFailureUrl("/api/login-fail");
-        return handler;
+        return new CustomAuthenticationFailureHandler();
+//        SimpleUrlAuthenticationFailureHandler handler
+//                = new SimpleUrlAuthenticationFailureHandler();
+//        handler.setDefaultFailureUrl("/api/login-fail");
+//        return handler;
     }
     @Bean
     public LogoutSuccessHandler logoutSuccessHandler(){

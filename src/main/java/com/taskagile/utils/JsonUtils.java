@@ -4,13 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.io.Writer;
 
 public final class JsonUtils {
-    public static String toJson(Object object) {
+    public static String toJson(Object object) throws RuntimeException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            return  objectMapper.writeValueAsString(object);
+            return objectMapper.writeValueAsString(object);
         }catch (JsonProcessingException e){
             throw new RuntimeException("Failed to convert object to JSON string", e);
         }
@@ -20,10 +21,11 @@ public final class JsonUtils {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.readValue(json, clazz);
         } catch (IOException e) {
-            System.out.println("Failed to convert string " + json + " class " + clazz.getName() + " " + e);
-            // [TODO] json utils logging
-            //log.error("Failed to convert string `" + json + "` class `" + clazz.getName() + "`", e);
             return null;
         }
+    }
+
+    public static void write(Writer writer, Object value) throws IOException {
+        new ObjectMapper().writeValue(writer, value);
     }
 }

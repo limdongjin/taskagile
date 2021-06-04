@@ -1,10 +1,9 @@
-package com.taskagile.web.apis.authenticate;
+package com.taskagile.web.apis.security;
 
 import com.taskagile.domain.model.user.SimpleUser;
 import com.taskagile.utils.JsonUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
@@ -43,14 +43,17 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             }
         }
 
-        MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-        MediaType jsonMimeType = MediaType.APPLICATION_JSON;
+//        MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
+//        MediaType jsonMimeType = MediaType.APPLICATION_JSON;
 
-        Object result = JsonUtils.toJson(securityUser);
-
-        if (jsonConverter.canWrite(result.getClass(), jsonMimeType)) {
-            jsonConverter.write(result, jsonMimeType, new ServletServerHttpResponse(response));
-        }
+//
+//        if (jsonConverter.canWrite(result.getClass(), jsonMimeType)) {
+//            jsonConverter.write(result, jsonMimeType, new ServletServerHttpResponse(response));
+//        }
+        Object result = JsonUtils.toObject(JsonUtils.toJson(securityUser), HashMap.class);
+        response.setContentType(MediaType.APPLICATION_JSON.toString());
+        response.setStatus(HttpStatus.OK.value());
+        JsonUtils.write(response.getWriter(), result);
     }
     public void setRequestCache(RequestCache requestCache) {
         this.requestCache = requestCache;

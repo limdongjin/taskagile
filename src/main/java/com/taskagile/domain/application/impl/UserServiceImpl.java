@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user;
+        // [TODO] loadUserByUsername_ 제어문 개선하기
         if(s.contains("@")){
             user = userRepository.findByEmailAddress(s);
         }else{

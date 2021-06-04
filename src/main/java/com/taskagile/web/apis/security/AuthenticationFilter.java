@@ -1,12 +1,10 @@
-package com.taskagile.web.apis.authenticate;
+package com.taskagile.web.apis.security;
 
 import com.taskagile.utils.JsonUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,19 +27,14 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest,
                                                 HttpServletResponse httpServletResponse)
             throws AuthenticationException, IOException, ServletException {
-        String requestBody = IOUtils.toString(httpServletRequest.getReader());
+        // 인증이 되지않았다면 예외를 던진다., 인증되었다면 Authentication 객체를 리턴한다.
 
-        Logger debug_auth = LoggerFactory.getLogger("debug auth");
-        debug_auth.error(httpServletRequest.toString());
-        debug_auth.error(httpServletRequest.getReader().toString());
-        debug_auth.error(requestBody);
-        debug_auth.error("debug auth!!!");
+        String requestBody = IOUtils.toString(httpServletRequest.getReader());
 
         LoginRequest loginRequest = JsonUtils.toObject(requestBody, LoginRequest.class);
 
-        if(loginRequest == null || loginRequest.isInvalid()){
+        if(isInValidLoginRequest(loginRequest)){
             // 시큐리티 내부에 있는 AuthenticationFailureHandler 가 처리한다.
-            debug_auth.error("loginRequst exception throwing");
             throw new InsufficientAuthenticationException("Invalid Authentication Request");
         }
 
@@ -55,9 +48,11 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
     static class LoginRequest {
         private String username;
         private String password;
+    }
 
-        public boolean isInvalid() {
-            return StringUtils.isBlank(username) || StringUtils.isBlank(password);
-        }
+    static boolean isInValidLoginRequest(LoginRequest loginRequest){
+        if(loginRequest == null) return true;
+
+        return StringUtils.isBlank(loginRequest.username) || StringUtils.isBlank(loginRequest.password);
     }
 }

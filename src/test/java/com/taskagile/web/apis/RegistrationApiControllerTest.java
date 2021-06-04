@@ -84,7 +84,7 @@ class RegistrationApiControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.toJson(payload)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message")
+                .andExpect(jsonPath("message")
                         .value("Username already exists"));
     }
 
