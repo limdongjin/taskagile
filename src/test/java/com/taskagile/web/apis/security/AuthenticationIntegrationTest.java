@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class AuthenticationIntegrationTest {
@@ -34,14 +34,15 @@ public class AuthenticationIntegrationTest {
         final String username = "hello world";
         final String password = "1q2w3e4r!!!";
 
-        AuthenticationFilter.LoginRequest loginRequest = new AuthenticationFilter.LoginRequest();
-        loginRequest.setUsername(emailAddress);
-        loginRequest.setPassword(password);
+        AuthenticationFilter.LoginPayload loginPayload =
+                new AuthenticationFilter.LoginPayload();
+        loginPayload.setUsername(emailAddress);
+        loginPayload.setPassword(password);
 
         // 가입되지않은 상태에서 로그인 요청은 실패한다.
         mockMvc.perform(post("/api/authentications")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(JsonUtils.toJson(loginRequest)))
+                    .content(JsonUtils.toJson(loginPayload)))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.message").value("fail"))
         ;
@@ -62,7 +63,7 @@ public class AuthenticationIntegrationTest {
         // 가입을 했기때문에 로그인 요청은 성공한다.
         mockMvc.perform(post("/api/authentications")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.toJson(loginRequest)))
+                .content(JsonUtils.toJson(loginPayload)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.authorities").exists())
         ;

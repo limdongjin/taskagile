@@ -43,19 +43,9 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             }
         }
 
-//        MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-//        MediaType jsonMimeType = MediaType.APPLICATION_JSON;
-
-//
-//        if (jsonConverter.canWrite(result.getClass(), jsonMimeType)) {
-//            jsonConverter.write(result, jsonMimeType, new ServletServerHttpResponse(response));
-//        }
         Object result = JsonUtils.toObject(JsonUtils.toJson(securityUser), HashMap.class);
         response.setContentType(MediaType.APPLICATION_JSON.toString());
         response.setStatus(HttpStatus.OK.value());
         JsonUtils.write(response.getWriter(), result);
-    }
-    public void setRequestCache(RequestCache requestCache) {
-        this.requestCache = requestCache;
     }
 }

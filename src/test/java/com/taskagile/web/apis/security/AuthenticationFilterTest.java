@@ -8,6 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,9 +36,7 @@ class AuthenticationFilterTest {
         authenticationFilter = new AuthenticationFilter();
         authenticationFilter.setAuthenticationManager(authenticationManagerMock);
         mockHttpServletRequest = new MockHttpServletRequest(METHOD, URL);
-
-        // note. authenticationManagerMock stubbing
-//        when(authenticationManagerMock.authenticate(any())).thenReturn(null);
+        mockHttpServletRequest.setContentType(MediaType.APPLICATION_JSON.toString());
     }
 
     @Test
@@ -74,7 +73,6 @@ class AuthenticationFilterTest {
     @DisplayName("정상적인 request body 라면 예외는 발생하지않는다. ")
     void attemptAuthentication_success(String requestBody){
         mockHttpServletRequest.setContent(requestBody.getBytes(StandardCharsets.UTF_8));
-
         assertDoesNotThrow(() -> {
             Authentication authentication = authenticationFilter.attemptAuthentication(mockHttpServletRequest, new MockHttpServletResponse());
             System.out.println(authentication);

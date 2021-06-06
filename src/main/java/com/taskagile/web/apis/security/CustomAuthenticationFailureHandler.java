@@ -20,8 +20,7 @@ public class CustomAuthenticationFailureHandler
         response.setContentType(MediaType.APPLICATION_JSON.toString());
 
         // [TODO] authentication fail response 형식 정하기
-        HashMap<String, Object> result =
-                new HashMap<>();
+        HashMap<String, Object> result = new HashMap<>();
         result.put("message", "fail");
         result.put("error", exception.getMessage());
         JsonUtils.write(response.getWriter(), result);

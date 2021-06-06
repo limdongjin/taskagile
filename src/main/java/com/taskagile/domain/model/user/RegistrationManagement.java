@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RegistrationManagement {
-    private UserRepository userRepository;
-    private PasswordEncryptor passwordEncryptor;
+    private final UserRepository userRepository;
+    private final PasswordEncryptor passwordEncryptor;
 
     public RegistrationManagement(UserRepository userRepository, PasswordEncryptor passwordEncryptor) {
         this.userRepository = userRepository;

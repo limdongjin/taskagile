@@ -1,0 +1,10 @@
+### Send POST request with json body
+### Not Registered User
+POST http://localhost:8080/api/boards
+Content-Type: application/json
+
+{
+  "name": "team1",
+  "description": "hello",
+  "teamId": 10
+}

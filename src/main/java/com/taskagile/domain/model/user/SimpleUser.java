@@ -28,6 +28,9 @@ public class SimpleUser implements UserDetails, Serializable {
         return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
+    public UserId getUserId(){
+        return new UserId(userId);
+    }
     @Override
     public String getPassword() {
         return password;
